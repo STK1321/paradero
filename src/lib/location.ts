@@ -66,5 +66,5 @@ export function useLocation() {
       : inBogota(query.data.lat, query.data.lon)
         ? { status: "ready", ...query.data }
         : { status: "outside" };
-  return { state, retry: askForLocation };
+  return { state, retry: askForLocation, refresh: query.refetch };
 }

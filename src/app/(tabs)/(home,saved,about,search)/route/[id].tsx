@@ -61,11 +61,11 @@ export default function RouteScreen() {
   useEffect(() => {
     if (refreshed.current) return;
     refreshed.current = true;
-    void refresh();
+    refresh();
   }, [refresh]);
 
   const goNear = () => {
-    void refresh();
+    refresh();
     setNearMe(true);
     if (nearest) map.current?.flyTo(nearest.lat, nearest.lon, 15.5);
   };

@@ -64,13 +64,20 @@ export default function RouteScreen() {
     void refresh();
   }, [refresh]);
 
+  const goNear = () => {
+    void refresh();
+    setNearMe(true);
+    if (nearest) map.current?.flyTo(nearest.lat, nearest.lon, 15.5);
+  };
+
   useEffect(() => {
-    if (targetLat != null && targetLon != null) {
-      map.current?.flyTo(targetLat, targetLon, 15.5);
-      return;
-    }
-    if (!path || path.length < 2) return;
-    const timer = setTimeout(() => map.current?.fit(path), reduceMotion ? 0 : 350);
+    const timer = setTimeout(() => {
+      if (targetLat != null && targetLon != null) {
+        map.current?.flyTo(targetLat, targetLon, 15.5);
+        return;
+      }
+      if (path && path.length >= 2) map.current?.fit(path);
+    }, reduceMotion ? 0 : 350);
     return () => clearTimeout(timer);
   }, [path, reduceMotion, targetLat, targetLon]);
 
@@ -124,7 +131,7 @@ export default function RouteScreen() {
 
             {nearest && (
               <View style={styles.modes}>
-                <Chip label={t.route.nearMe} selected={nearMe} radio onPress={() => { void refresh(); setNearMe(true); }} />
+                <Chip label={t.route.nearMe} selected={nearMe} radio onPress={goNear} />
                 <Chip label={t.route.fullRoute} selected={!nearMe} radio onPress={() => setNearMe(false)} />
               </View>
             )}
